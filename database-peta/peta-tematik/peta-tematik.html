@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#000000">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Peta Tematik</title>
+    <link rel="icon" href="favicon.ico" type="image/png">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
+    integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
+    crossorigin=""/>
+
+    <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
+    integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
+    crossorigin=""></script>
+
+
+    
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+   
+    <link rel="stylesheet" href="css/app.css">
+    <link rel="stylesheet" href="js/leaflet-locatecontrol-gh-pages/dist/L.Control.Locate.min.css">
+    <link rel="stylesheet" href="js/L.switchBasemap-master/src/L.switchBasemap.css">
+    <link rel="stylesheet" href="js/Leaflet-MiniMap-master/src/Control.MiniMap.css">
+    <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+    <link rel="stylesheet" href="css/leaflet-search.css">
+
+    
+
+    
+
+
+</head>
+
+
+  <body>
+
+    <!--/.navbar -->
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <div class="navbar-icon-container">
+            <a href="#" class="navbar-icon pull-right visible-xs" id="nav-btn"><i class="fa fa-bars fa-lg"></i></a>
+          </div>
+          <a class="navbar-brand" href="#"> <a href="#"></a><img src="images/logo.png" alt="Logo Sitaru"></a>
+        </div>
+
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a class="active" href="../../index.html" href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="about-btn"><i 
+                class="fa fa-home"></i>&nbsp;&nbsp;Beranda</a></li>
+          </ul>
+        </div><!--/.navbar-collapse -->
+      </div>
+    </div>
+
+
+        <div id="map"></div>
+
+        
+        
+        <script src="js/L.switchBasemap-master/src/L.switchBasemap.js"></script>
+
+        <script src="js/leaflet.ajax.js"></script>
+        
+        <script>
+          
+            var map = L.map('map', {
+                center: [-7.3609099,109.9017055],
+                zoom: 10,
+                zoomControl: true,
+            });
+
+            new L.basemapsSwitcher([
+              {
+                layer: L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }).addTo(map), //DEFAULT MAP
+                icon: 'js/L.switchBasemap-master/example/assets/images/img1.PNG',
+                name: 'OSM'
+              },
+
+              {
+              layer: L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png',{
+              attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
+              }),
+              icon: 'js/L.switchBasemap-master/example/assets/images/img2.PNG',
+              name: 'STADIA'
+              },
+
+              {
+              layer: L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+              attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+              }),
+              icon: 'js/L.switchBasemap-master/example/assets/images/img3.PNG',
+              name: 'TOPOGRAFI'
+              },
+            ], { position: 'topright' }).addTo(map);
+
+
+            L.control.scale({
+            position: 'bottomleft',
+            }).addTo(map);
+
+            function popUp(f,l){
+                var out = [];
+                if (f.properties){
+                for(key in f.properties){
+                console.log(key);
+                }
+                    out.push("Kecamatan : "+"<b>"+f.properties['KECAMATAN']+"</b>");
+                    out.push("Desa : "+"<b>"+f.properties['DESA']+"</b>");
+                    out.push("DPK : "+"<b>"+f.properties['DPK_1']+"</b>");
+                l.bindPopup(out.join("<br/>"));
+                }
+              }
+            
+            var jsonTest = new L.GeoJSON.AJAX(["geojson/DPK.geojson"],{onEachFeature:popUp}).addTo(map);
+
+        </script>
+
+
+
+
+        
+   
+     
+    </body>
+</html>
